@@ -1,0 +1,11 @@
+*.log
+
+# Vim
+*.swo
+*.swp
+
+# Node
+node_modules/
+
+# TypeScript
+dist/

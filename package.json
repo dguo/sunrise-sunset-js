@@ -1,0 +1,41 @@
+{
+    "name": "sunset-sunrise-api",
+    "version": "0.1.0",
+    "description": "Access the sunrise-sunset.org API",
+    "homepage": "https://github.com/dguo/sunset-sunrise-api",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dguo/sunset-sunrise-api.git"
+    },
+    "author": {
+        "name": "Danny Guo",
+        "email": "danny@dannyguo.com",
+        "url": "https://dannyguo.com"
+    },
+    "license": "MIT",
+    "scripts": {
+        "build": "yarn run clean && tsc",
+        "build:watch": "yarn run clean && tsc --watch",
+        "clean": "rimraf dist",
+        "format": "prettier --write \"./**/*.{json,ts}\"",
+        "format:check": "prettier --list-different \"./**/*.{json,ts}\"",
+        "lint": "eslint *.ts",
+        "prepublishOnly": "yarn run format && yarn run lint && yarn run test && yarn run build",
+        "start": "yarn install && yarn run test:watch",
+        "test": "jest",
+        "test:watch": "jest --watchAll"
+    },
+    "dependencies": {
+        "ky": "^0.24.0",
+        "ky-universal": "^0.8.2"
+    },
+    "devDependencies": {
+        "prettier": "^2.1.2",
+        "rimraf": "^3.0.2",
+        "typescript": "^4.0.5"
+    },
+    "prettier": {
+        "bracketSpacing": false,
+        "tabWidth": 4
+    }
+}
