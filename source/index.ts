@@ -1,4 +1,5 @@
 import ky from "ky-universal";
+import {Options as KyOptions} from "ky";
 import camelCaseKeys from "camelcase-keys";
 
 interface BaseSunsetSunriseRequest {
@@ -6,6 +7,7 @@ interface BaseSunsetSunriseRequest {
     longitude: number;
     date?: string;
     camelCase?: boolean;
+    kyOptions?: KyOptions;
 }
 
 type SunsetSunriseStatus =
@@ -99,7 +101,8 @@ export async function getSunsetSunriseInfo(
     | UnformattedSnakeCaseSunsetSunriseResponse
     | UnformattedCamelCaseSunsetSunriseResponse
 > {
-    const response = await ky.get(`https://api.sunrise-sunset.org/json`, {
+    const response = await ky(`https://api.sunrise-sunset.org/json`, {
+        method: "get",
         searchParams: {
             lat: request.latitude,
             lng: request.longitude,
@@ -108,6 +111,7 @@ export async function getSunsetSunriseInfo(
                 formatted: request.formatted ? 1 : 0,
             }),
         },
+        ...request.kyOptions,
     });
 
     const body = await response.json();
