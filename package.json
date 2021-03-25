@@ -1,5 +1,5 @@
 {
-    "name": "sunset-sunrise-api",
+    "name": "sunset-sunrise",
     "version": "0.1.0",
     "description": "Access the sunrise-sunset.org API",
     "homepage": "https://github.com/dguo/sunset-sunrise-api",
@@ -26,6 +26,7 @@
         "test:watch": "jest --watchAll"
     },
     "dependencies": {
+        "camelcase-keys": "^6.2.2",
         "ky": "^0.24.0",
         "ky-universal": "^0.8.2"
     },

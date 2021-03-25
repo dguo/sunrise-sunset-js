@@ -1,9 +1,11 @@
 import ky from "ky-universal";
+import camelCaseKeys from "camelcase-keys";
 
 interface BaseSunsetSunriseRequest {
     latitude: number;
     longitude: number;
     date?: string;
+    camelCase?: boolean;
 }
 
 type SunsetSunriseStatus =
@@ -12,7 +14,7 @@ type SunsetSunriseStatus =
     | "INVALID_DATE"
     | "UNKNOWN_ERROR";
 
-interface BaseSunsetSunriseResults {
+interface BaseSnakeCaseSunsetSunriseResults {
     sunrise: string;
     sunset: string;
     solar_noon: string;
@@ -24,36 +26,88 @@ interface BaseSunsetSunriseResults {
     astronomical_twilight_end: string;
 }
 
-interface UnformattedSunsetSunriseResponse {
-    results: BaseSunsetSunriseResults & {
+interface BaseCamelCaseSunsetSunriseResults {
+    sunrise: string;
+    sunset: string;
+    solarNoon: string;
+    civilTwilightBegin: string;
+    civilTwilightEnd: string;
+    nauticalTwilightBegin: string;
+    nauticalTwilightEnd: string;
+    astronomicalTwilightBegin: string;
+    astronomicalTwilightEnd: string;
+}
+
+interface UnformattedSnakeCaseSunsetSunriseResponse {
+    results: BaseSnakeCaseSunsetSunriseResults & {
         day_length: string;
     };
     status: SunsetSunriseStatus;
 }
 
-interface FormattedSunsetSunriseResponse {
-    results: BaseSunsetSunriseResults & {
+interface UnformattedCamelCaseSunsetSunriseResponse {
+    results: BaseCamelCaseSunsetSunriseResults & {
+        dayLength: string;
+    };
+    status: SunsetSunriseStatus;
+}
+
+interface FormattedSnakeCaseSunsetSunriseResponse {
+    results: BaseSnakeCaseSunsetSunriseResults & {
         day_length: number;
     };
     status: SunsetSunriseStatus;
 }
 
-export async function getSunsetSunriseInfo(
-    request: BaseSunsetSunriseRequest & {formatted?: false}
-): Promise<UnformattedSunsetSunriseResponse>;
+interface FormattedCamelCaseSunsetSunriseResponse {
+    results: BaseCamelCaseSunsetSunriseResults & {
+        dayLength: number;
+    };
+    status: SunsetSunriseStatus;
+}
 
 export async function getSunsetSunriseInfo(
-    request: BaseSunsetSunriseRequest & {formatted: true}
-): Promise<FormattedSunsetSunriseResponse>;
+    request: BaseSunsetSunriseRequest & {formatted: false; camelCase?: false}
+): Promise<UnformattedSnakeCaseSunsetSunriseResponse>;
 
 export async function getSunsetSunriseInfo(
-    request: BaseSunsetSunriseRequest & {formatted: boolean}
-): Promise<FormattedSunsetSunriseResponse | UnformattedSunsetSunriseResponse>;
+    request: BaseSunsetSunriseRequest & {formatted: false; camelCase: true}
+): Promise<UnformattedCamelCaseSunsetSunriseResponse>;
 
 export async function getSunsetSunriseInfo(
-    request: BaseSunsetSunriseRequest & {formatted?: boolean}
-): Promise<FormattedSunsetSunriseResponse | UnformattedSunsetSunriseResponse> {
-    const response = await ky
+    request: BaseSunsetSunriseRequest & {formatted?: true; camelCase?: false}
+): Promise<FormattedSnakeCaseSunsetSunriseResponse>;
+
+export async function getSunsetSunriseInfo(
+    request: BaseSunsetSunriseRequest & {formatted?: true; camelCase: true}
+): Promise<FormattedCamelCaseSunsetSunriseResponse>;
+
+export async function getSunsetSunriseInfo(
+    request: BaseSunsetSunriseRequest & {formatted: boolean; camelCase?: false}
+): Promise<
+    | FormattedSnakeCaseSunsetSunriseResponse
+    | UnformattedSnakeCaseSunsetSunriseResponse
+>;
+
+export async function getSunsetSunriseInfo(
+    request: BaseSunsetSunriseRequest & {formatted: boolean; camelCase: true}
+): Promise<
+    | FormattedCamelCaseSunsetSunriseResponse
+    | UnformattedCamelCaseSunsetSunriseResponse
+>;
+
+export async function getSunsetSunriseInfo(
+    request: BaseSunsetSunriseRequest & {
+        formatted?: boolean;
+        camelCase?: boolean;
+    }
+): Promise<
+    | FormattedSnakeCaseSunsetSunriseResponse
+    | FormattedCamelCaseSunsetSunriseResponse
+    | UnformattedSnakeCaseSunsetSunriseResponse
+    | UnformattedCamelCaseSunsetSunriseResponse
+> {
+    const response: any = await ky
         .get(`https://api.sunrise-sunset.org/json`, {
             searchParams: {
                 lat: request.latitude,
@@ -66,7 +120,9 @@ export async function getSunsetSunriseInfo(
         })
         .json();
 
-    return response as
-        | FormattedSunsetSunriseResponse
-        | UnformattedSunsetSunriseResponse;
+    if (request.camelCase) {
+        response.results = camelCaseKeys(response.results);
+    }
+
+    return response;
 }
