@@ -19,7 +19,7 @@
         "clean": "rimraf build",
         "format": "prettier --write \"./**/*.{json,ts}\"",
         "format:check": "prettier --list-different \"./**/*.{json,ts}\"",
-        "lint": "eslint *.ts",
+        "lint": "eslint \"./**/*.ts\"",
         "prepublishOnly": "yarn run format && yarn run lint && yarn run test && yarn run build",
         "start": "yarn install && yarn run test:watch",
         "test": "jest",
@@ -31,9 +31,24 @@
         "ky-universal": "^0.8.2"
     },
     "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^4.19.0",
+        "@typescript-eslint/parser": "^4.19.0",
+        "eslint": "^7.22.0",
+        "eslint-config-prettier": "^8.1.0",
         "prettier": "^2.1.2",
         "rimraf": "^3.0.2",
         "typescript": "^4.0.5"
+    },
+    "eslintConfig": {
+        "parser": "@typescript-eslint/parser",
+        "plugins": [
+            "@typescript-eslint"
+        ],
+        "extends": [
+            "eslint:recommended",
+            "plugin:@typescript-eslint/recommended",
+            "prettier"
+        ]
     },
     "prettier": {
         "bracketSpacing": false,

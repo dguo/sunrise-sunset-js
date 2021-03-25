@@ -11,12 +11,6 @@ interface BaseSunsetSunriseRequest {
     kyOptions?: KyOptions;
 }
 
-type SunsetSunriseStatus =
-    | "OK"
-    | "INVALID_REQUEST"
-    | "INVALID_DATE"
-    | "UNKNOWN_ERROR";
-
 interface BaseSnakeCaseSunsetSunriseResults {
     sunrise: string;
     sunset: string;
