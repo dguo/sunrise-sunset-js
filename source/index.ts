@@ -38,32 +38,24 @@ interface BaseCamelCaseSunsetSunriseResults {
     astronomicalTwilightEnd: string;
 }
 
-interface UnformattedSnakeCaseSunsetSunriseResponse {
-    results: BaseSnakeCaseSunsetSunriseResults & {
-        day_length: string;
-    };
-    status: SunsetSunriseStatus;
+interface UnformattedSnakeCaseSunsetSunriseResponse
+    extends BaseSnakeCaseSunsetSunriseResults {
+    day_length: string;
 }
 
-interface UnformattedCamelCaseSunsetSunriseResponse {
-    results: BaseCamelCaseSunsetSunriseResults & {
-        dayLength: string;
-    };
-    status: SunsetSunriseStatus;
+interface UnformattedCamelCaseSunsetSunriseResponse
+    extends BaseCamelCaseSunsetSunriseResults {
+    dayLength: string;
 }
 
-interface FormattedSnakeCaseSunsetSunriseResponse {
-    results: BaseSnakeCaseSunsetSunriseResults & {
-        day_length: number;
-    };
-    status: SunsetSunriseStatus;
+interface FormattedSnakeCaseSunsetSunriseResponse
+    extends BaseSnakeCaseSunsetSunriseResults {
+    day_length: number;
 }
 
-interface FormattedCamelCaseSunsetSunriseResponse {
-    results: BaseCamelCaseSunsetSunriseResults & {
-        dayLength: number;
-    };
-    status: SunsetSunriseStatus;
+interface FormattedCamelCaseSunsetSunriseResponse
+    extends BaseCamelCaseSunsetSunriseResults {
+    dayLength: number;
 }
 
 export async function getSunsetSunriseInfo(
@@ -107,22 +99,22 @@ export async function getSunsetSunriseInfo(
     | UnformattedSnakeCaseSunsetSunriseResponse
     | UnformattedCamelCaseSunsetSunriseResponse
 > {
-    const response: any = await ky
-        .get(`https://api.sunrise-sunset.org/json`, {
-            searchParams: {
-                lat: request.latitude,
-                lng: request.longitude,
-                ...(request.date && {date: request.date}),
-                ...(typeof request.formatted === "boolean" && {
-                    formatted: request.formatted ? 1 : 0,
-                }),
-            },
-        })
-        .json();
+    const response = await ky.get(`https://api.sunrise-sunset.org/json`, {
+        searchParams: {
+            lat: request.latitude,
+            lng: request.longitude,
+            ...(request.date && {date: request.date}),
+            ...(typeof request.formatted === "boolean" && {
+                formatted: request.formatted ? 1 : 0,
+            }),
+        },
+    });
+
+    const body = await response.json();
 
     if (request.camelCase) {
-        response.results = camelCaseKeys(response.results);
+        body.results = camelCaseKeys(body.results);
     }
 
-    return response;
+    return body.results;
 }
