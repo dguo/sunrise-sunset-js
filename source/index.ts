@@ -102,6 +102,31 @@ export async function getSunsetSunriseInfo(
     | UnformattedSnakeCaseSunsetSunriseResponse
     | UnformattedCamelCaseSunsetSunriseResponse
 > {
+    if (!request.latitude) {
+        throw new Error("Latitude is a required parameter");
+    }
+    if (!request.longitude) {
+        throw new Error("Longitude is a required parameter");
+    }
+    if (
+        typeof request.latitude !== "number" ||
+        !isFinite(request.latitude) ||
+        Math.abs(request.latitude) > 90
+    ) {
+        throw new Error(
+            "Latitude must be a number between -90 and 90 (inclusive)"
+        );
+    }
+    if (
+        typeof request.longitude !== "number" ||
+        !isFinite(request.longitude) ||
+        Math.abs(request.longitude) > 180
+    ) {
+        throw new Error(
+            "Longitude must be a number between -180 and 180 (inclusive)"
+        );
+    }
+
     const response = await ky(
         request.apiUrl || `https://api.sunrise-sunset.org/json`,
         {
