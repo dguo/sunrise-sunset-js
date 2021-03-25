@@ -16,7 +16,7 @@
     "scripts": {
         "build": "yarn run clean && tsc",
         "build:watch": "yarn run clean && tsc --watch",
-        "clean": "rimraf dist",
+        "clean": "rimraf build",
         "format": "prettier --write \"./**/*.{json,ts}\"",
         "format:check": "prettier --list-different \"./**/*.{json,ts}\"",
         "lint": "eslint *.ts",

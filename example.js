@@ -1,10 +1,13 @@
-const getSunsetSunriseInfo = require('./dist').getSunsetSunriseInfo;
+const getSunsetSunriseInfo = require("./build").getSunsetSunriseInfo;
 
 (async function main() {
     try {
-    const response = await getSunsetSunriseInfo({latitude: 36.7201600, longitude: -4.4203400});
-    console.log(response);
+        const response = await getSunsetSunriseInfo({
+            latitude: 36.72016,
+            longitude: -4.42034,
+        });
+        console.log(response);
     } catch (error) {
         console.log(await error.response.json());
     }
-})()
+})();
