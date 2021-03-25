@@ -7,6 +7,7 @@ interface BaseSunsetSunriseRequest {
     longitude: number;
     date?: string;
     camelCase?: boolean;
+    apiUrl?: string;
     kyOptions?: KyOptions;
 }
 
@@ -101,18 +102,21 @@ export async function getSunsetSunriseInfo(
     | UnformattedSnakeCaseSunsetSunriseResponse
     | UnformattedCamelCaseSunsetSunriseResponse
 > {
-    const response = await ky(`https://api.sunrise-sunset.org/json`, {
-        method: "get",
-        searchParams: {
-            lat: request.latitude,
-            lng: request.longitude,
-            ...(request.date && {date: request.date}),
-            ...(typeof request.formatted === "boolean" && {
-                formatted: request.formatted ? 1 : 0,
-            }),
-        },
-        ...request.kyOptions,
-    });
+    const response = await ky(
+        request.apiUrl || `https://api.sunrise-sunset.org/json`,
+        {
+            method: "get",
+            searchParams: {
+                lat: request.latitude,
+                lng: request.longitude,
+                ...(request.date && {date: request.date}),
+                ...(typeof request.formatted === "boolean" && {
+                    formatted: request.formatted ? 1 : 0,
+                }),
+            },
+            ...request.kyOptions,
+        }
+    );
 
     const body = await response.json();
 
