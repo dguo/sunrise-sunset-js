@@ -85,3 +85,15 @@ test.each([180.1, "bar", -190, NaN, null])(
         ).rejects.toThrowError(/longitude/i);
     }
 );
+
+test.each([42, true])("Errors for a bad date: %p", async (invalidDate) => {
+    fetchMock.mock("*", MOCK_FORMATTED_RESPONSE);
+
+    await expect(
+        getSunsetSunriseInfo({
+            latitude: 50,
+            longitude: 70,
+            date: (invalidDate as unknown) as string,
+        })
+    ).rejects.toThrowError(/date/i);
+});

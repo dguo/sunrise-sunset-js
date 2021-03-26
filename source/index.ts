@@ -5,7 +5,7 @@ import camelCaseKeys from "camelcase-keys";
 interface BaseSunsetSunriseRequest {
     latitude: number;
     longitude: number;
-    date?: string;
+    date?: string | null;
     camelCase?: boolean;
     apiUrl?: string;
     kyOptions?: KyOptions;
@@ -120,6 +120,13 @@ export async function getSunsetSunriseInfo(
             "Longitude must be a number between -180 and 180 (inclusive)"
         );
     }
+    if (
+        typeof request.date !== "undefined" &&
+        request.date !== null &&
+        typeof request.date !== "string"
+    ) {
+        throw new Error("Invalid date");
+    }
 
     const response = await ky(
         request.apiUrl || `https://api.sunrise-sunset.org/json`,
@@ -128,7 +135,7 @@ export async function getSunsetSunriseInfo(
             searchParams: {
                 lat: request.latitude,
                 lng: request.longitude,
-                ...(request.date && {date: request.date}),
+                ...(typeof request.date === "string" && {date: request.date}),
                 ...(typeof request.formatted === "boolean" && {
                     formatted: request.formatted ? 1 : 0,
                 }),
