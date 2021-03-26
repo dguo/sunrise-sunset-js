@@ -9,7 +9,7 @@ parser = argparse.ArgumentParser(prog='./dev')
 subparsers = parser.add_subparsers(metavar='<command>', title='commands')
 
 DOCKER_RUN = ['docker', 'run', '-it', '--rm', '-v',
-              os.getcwd() + ':/src:cached', '-w=/src', 'node:14.16.0-alpine']
+              os.getcwd() + ':/src', '-w=/src', 'node:14.16.0-alpine']
 
 def command(help):
     def decorator(func):
