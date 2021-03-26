@@ -31,12 +31,16 @@
         "ky-universal": "^0.8.2"
     },
     "devDependencies": {
+        "@types/jest": "^26.0.22",
         "@typescript-eslint/eslint-plugin": "^4.19.0",
         "@typescript-eslint/parser": "^4.19.0",
         "eslint": "^7.22.0",
         "eslint-config-prettier": "^8.1.0",
+        "fetch-mock-jest": "^1.5.1",
+        "jest": "^26.6.3",
         "prettier": "^2.1.2",
         "rimraf": "^3.0.2",
+        "ts-jest": "^26.5.4",
         "typescript": "^4.0.5"
     },
     "eslintConfig": {
@@ -49,6 +53,10 @@
             "plugin:@typescript-eslint/recommended",
             "prettier"
         ]
+    },
+    "jest": {
+        "preset": "ts-jest",
+        "testEnvironment": "node"
     },
     "prettier": {
         "bracketSpacing": false,

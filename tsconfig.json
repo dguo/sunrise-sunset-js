@@ -7,5 +7,6 @@
         "strict": true,
         "target": "ES6"
     },
-    "include": ["source/**/*"]
+    "include": ["source/**/*"],
+    "exclude": ["**/*.test.ts"]
 }
