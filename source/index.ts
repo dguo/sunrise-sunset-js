@@ -129,7 +129,7 @@ export async function getSunsetSunriseInfo(
     }
 
     const response = await ky(
-        request.apiUrl || `https://api.sunrise-sunset.org/json`,
+        request.apiUrl || "https://api.sunrise-sunset.org/json",
         {
             method: "get",
             searchParams: {
