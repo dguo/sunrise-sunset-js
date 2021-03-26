@@ -55,6 +55,32 @@ test("Successful formatted camel case response", async () => {
     expect(info).toEqual(mocks.MOCK_FORMATTED_CAMEL_CASE_RESPONSE);
 });
 
+test("Can override the API URL", async () => {
+    const newUrl = "https://example.com";
+
+    await getSunsetSunriseInfo({
+        latitude: 34.5,
+        longitude: 88.88,
+        apiUrl: newUrl,
+    });
+
+    expect(fetchMock.lastUrl()).toMatch(newUrl);
+});
+
+test("Can override Ky options", async () => {
+    await getSunsetSunriseInfo({
+        latitude: 34.5,
+        longitude: 88.88,
+        kyOptions: {
+            searchParams: {
+                foo: "bar",
+            },
+        },
+    });
+
+    expect(fetchMock.lastUrl()).toMatch("foo=bar");
+});
+
 test.each([100, "foo", -90.1, NaN, null])(
     "Errors for an invalid latitude: %p",
     async (invalidLatitude) => {
