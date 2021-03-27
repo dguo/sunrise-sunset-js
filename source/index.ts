@@ -16,7 +16,7 @@ export {
     MOCK_UNFORMATTED_SNAKE_CASE_RESPONSE,
 };
 
-interface BaseSunsetSunriseRequest {
+interface BaseSunriseSunsetRequest {
     latitude: number;
     longitude: number;
     date?: string | null;
@@ -25,7 +25,7 @@ interface BaseSunsetSunriseRequest {
     useMocks?: boolean;
 }
 
-interface BaseSnakeCaseSunsetSunriseResults {
+interface BaseSnakeCaseSunriseSunsetResults {
     sunrise: string;
     sunset: string;
     solar_noon: string;
@@ -37,7 +37,7 @@ interface BaseSnakeCaseSunsetSunriseResults {
     astronomical_twilight_end: string;
 }
 
-interface BaseCamelCaseSunsetSunriseResults {
+interface BaseCamelCaseSunriseSunsetResults {
     sunrise: string;
     sunset: string;
     solarNoon: string;
@@ -49,78 +49,78 @@ interface BaseCamelCaseSunsetSunriseResults {
     astronomicalTwilightEnd: string;
 }
 
-interface UnformattedSnakeCaseSunsetSunriseResponse
-    extends BaseSnakeCaseSunsetSunriseResults {
+interface UnformattedSnakeCaseSunriseSunsetResponse
+    extends BaseSnakeCaseSunriseSunsetResults {
     day_length: string;
 }
 
-interface UnformattedCamelCaseSunsetSunriseResponse
-    extends BaseCamelCaseSunsetSunriseResults {
+interface UnformattedCamelCaseSunriseSunsetResponse
+    extends BaseCamelCaseSunriseSunsetResults {
     dayLength: string;
 }
 
-interface FormattedSnakeCaseSunsetSunriseResponse
-    extends BaseSnakeCaseSunsetSunriseResults {
+interface FormattedSnakeCaseSunriseSunsetResponse
+    extends BaseSnakeCaseSunriseSunsetResults {
     day_length: number;
 }
 
-interface FormattedCamelCaseSunsetSunriseResponse
-    extends BaseCamelCaseSunsetSunriseResults {
+interface FormattedCamelCaseSunriseSunsetResponse
+    extends BaseCamelCaseSunriseSunsetResults {
     dayLength: number;
 }
 
-export interface SunsetSunriseRequest extends BaseSunsetSunriseRequest {
+export interface SunriseSunsetRequest extends BaseSunriseSunsetRequest {
     formatted?: boolean;
     camelCase?: boolean;
 }
 
-type SnakeCaseSunsetSunriseResponse =
-    | FormattedSnakeCaseSunsetSunriseResponse
-    | UnformattedSnakeCaseSunsetSunriseResponse;
+type SnakeCaseSunriseSunsetResponse =
+    | FormattedSnakeCaseSunriseSunsetResponse
+    | UnformattedSnakeCaseSunriseSunsetResponse;
 
-type CamelCaseSunsetSunriseResponse =
-    | FormattedCamelCaseSunsetSunriseResponse
-    | UnformattedCamelCaseSunsetSunriseResponse;
+type CamelCaseSunriseSunsetResponse =
+    | FormattedCamelCaseSunriseSunsetResponse
+    | UnformattedCamelCaseSunriseSunsetResponse;
 
-export type SunsetSunriseResponse =
-    | SnakeCaseSunsetSunriseResponse
-    | CamelCaseSunsetSunriseResponse;
+export type SunriseSunsetResponse =
+    | SnakeCaseSunriseSunsetResponse
+    | CamelCaseSunriseSunsetResponse;
 
-export async function getSunsetSunriseInfo(
-    request: BaseSunsetSunriseRequest & {formatted: false; camelCase?: false}
-): Promise<UnformattedSnakeCaseSunsetSunriseResponse>;
+export async function getSunriseSunsetInfo(
+    request: BaseSunriseSunsetRequest & {formatted: false; camelCase?: false}
+): Promise<UnformattedSnakeCaseSunriseSunsetResponse>;
 
-export async function getSunsetSunriseInfo(
-    request: BaseSunsetSunriseRequest & {formatted: false; camelCase: true}
-): Promise<UnformattedCamelCaseSunsetSunriseResponse>;
+export async function getSunriseSunsetInfo(
+    request: BaseSunriseSunsetRequest & {formatted: false; camelCase: true}
+): Promise<UnformattedCamelCaseSunriseSunsetResponse>;
 
-export async function getSunsetSunriseInfo(
-    request: BaseSunsetSunriseRequest & {formatted?: true; camelCase?: false}
-): Promise<FormattedSnakeCaseSunsetSunriseResponse>;
+export async function getSunriseSunsetInfo(
+    request: BaseSunriseSunsetRequest & {formatted?: true; camelCase?: false}
+): Promise<FormattedSnakeCaseSunriseSunsetResponse>;
 
-export async function getSunsetSunriseInfo(
-    request: BaseSunsetSunriseRequest & {formatted?: true; camelCase: true}
-): Promise<FormattedCamelCaseSunsetSunriseResponse>;
+export async function getSunriseSunsetInfo(
+    request: BaseSunriseSunsetRequest & {formatted?: true; camelCase: true}
+): Promise<FormattedCamelCaseSunriseSunsetResponse>;
 
-export async function getSunsetSunriseInfo(
-    request: BaseSunsetSunriseRequest & {formatted: boolean; camelCase?: false}
-): Promise<SnakeCaseSunsetSunriseResponse>;
+export async function getSunriseSunsetInfo(
+    request: BaseSunriseSunsetRequest & {formatted: boolean; camelCase?: false}
+): Promise<SnakeCaseSunriseSunsetResponse>;
 
-export async function getSunsetSunriseInfo(
-    request: BaseSunsetSunriseRequest & {formatted: boolean; camelCase: true}
-): Promise<CamelCaseSunsetSunriseResponse>;
+export async function getSunriseSunsetInfo(
+    request: BaseSunriseSunsetRequest & {formatted: boolean; camelCase: true}
+): Promise<CamelCaseSunriseSunsetResponse>;
 
 /* We need to duplicate the implementation signature because only the overloads
    contribute to the final shape of the function signature. See:
    https://github.com/Microsoft/TypeScript/wiki/FAQ#why-am-i-getting-supplied-parameters-do-not-match-any-signature-error
    */
-export async function getSunsetSunriseInfo(
-    request: SunsetSunriseRequest
-): Promise<SunsetSunriseResponse>;
+export async function getSunriseSunsetInfo(
+    request: SunriseSunsetRequest
+): Promise<SunriseSunsetResponse>;
 
-export async function getSunsetSunriseInfo(
-    request: SunsetSunriseRequest
-): Promise<SunsetSunriseResponse> {
+export async function getSunriseSunsetInfo(
+    request: SunriseSunsetRequest
+): Promise<SunriseSunsetResponse> {
     if (!request.latitude) {
         throw new Error("Latitude is a required parameter");
     }

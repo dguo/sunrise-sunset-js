@@ -1,11 +1,11 @@
 {
-    "name": "sunset-sunrise",
+    "name": "sunrise-sunset-api",
     "version": "0.1.0",
     "description": "Access the sunrise-sunset.org API",
-    "homepage": "https://github.com/dguo/sunset-sunrise-api",
+    "homepage": "https://github.com/dguo/sunrise-sunset-api",
     "repository": {
         "type": "git",
-        "url": "https://github.com/dguo/sunset-sunrise-api.git"
+        "url": "https://github.com/dguo/sunrise-sunset-api.git"
     },
     "author": {
         "name": "Danny Guo",
