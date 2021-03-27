@@ -1,5 +1,12 @@
 # Sunrise-Sunset JS
 
+[![npm](https://img.shields.io/npm/v/sunrise-sunset-api.svg)](https://www.npmjs.com/package/sunrise-sunset-api)
+[![license](https://img.shields.io/npm/l/sunrise-sunset-api.svg)](https://github.com/dguo/sunrise-sunset-api/blob/main/LICENSE.txt)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/sunrise-sunset-api)](https://bundlephobia.com/result?p=sunrise-sunset-api)
+[![CI status](https://github.com/dguo/sunrise-sunset-js/workflows/CI/badge.svg)](https://github.com/dguo/sunrise-sunset-js/actions?query=branch%3Amain)
+[![test coverage](https://codecov.io/gh/dguo/sunrise-sunset-js/branch/main/graph/badge.svg)](https://codecov.io/gh/dguo/sunrise-sunset-js)
+[![known vulnerabilities](https://snyk.io/test/github/dguo/sunrise-sunset-js/badge.svg?targetFile=package.json)](https://snyk.io/test/github/dguo/sunrise-sunset-js?targetFile=package.json)
+
 JavaScript client for the [Sunrise-Sunset
 API](https://sunrise-sunset.org/api).
 
