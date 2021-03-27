@@ -1,7 +1,11 @@
 {
     "name": "sunrise-sunset-api",
     "version": "0.1.0",
-    "description": "Access the sunrise-sunset.org API",
+    "description": "Client library for the sunrise-sunset.org API",
+    "keywords": [
+        "sunrise",
+        "sunset"
+    ],
     "homepage": "https://github.com/dguo/sunrise-sunset-api",
     "repository": {
         "type": "git",
@@ -12,6 +16,12 @@
         "email": "danny@dannyguo.com",
         "url": "https://dannyguo.com"
     },
+    "files": [
+        "build"
+    ],
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
+    "sideEffects": false,
     "license": "MIT",
     "scripts": {
         "build": "yarn run clean && tsc",
