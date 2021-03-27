@@ -69,7 +69,7 @@ interface FormattedCamelCaseSunsetSunriseResponse
     dayLength: number;
 }
 
-interface SunsetSunriseRequest extends BaseSunsetSunriseRequest {
+export interface SunsetSunriseRequest extends BaseSunsetSunriseRequest {
     formatted?: boolean;
     camelCase?: boolean;
 }
@@ -82,7 +82,7 @@ type CamelCaseSunsetSunriseResponse =
     | FormattedCamelCaseSunsetSunriseResponse
     | UnformattedCamelCaseSunsetSunriseResponse;
 
-type SunsetSunriseResponse =
+export type SunsetSunriseResponse =
     | SnakeCaseSunsetSunriseResponse
     | CamelCaseSunsetSunriseResponse;
 
