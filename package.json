@@ -21,7 +21,7 @@
         "format:check": "prettier --list-different \"./**/*.{json,ts}\"",
         "lint": "eslint \"./**/*.ts\"",
         "prepublishOnly": "yarn run format && yarn run lint && yarn run test && yarn run build",
-        "start": "yarn install && yarn run test:watch",
+        "start": "yarn install && yarn run build:watch",
         "test": "jest",
         "test:watch": "jest --watchAll"
     },

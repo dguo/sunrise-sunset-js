@@ -2,13 +2,27 @@ import ky from "ky-universal";
 import {Options as KyOptions} from "ky";
 import camelCaseKeys from "camelcase-keys";
 
+import {
+    MOCK_FORMATTED_CAMEL_CASE_RESPONSE,
+    MOCK_FORMATTED_SNAKE_CASE_RESPONSE,
+    MOCK_UNFORMATTED_CAMEL_CASE_RESPONSE,
+    MOCK_UNFORMATTED_SNAKE_CASE_RESPONSE,
+} from "./mocks";
+
+export {
+    MOCK_FORMATTED_CAMEL_CASE_RESPONSE,
+    MOCK_FORMATTED_SNAKE_CASE_RESPONSE,
+    MOCK_UNFORMATTED_CAMEL_CASE_RESPONSE,
+    MOCK_UNFORMATTED_SNAKE_CASE_RESPONSE,
+};
+
 interface BaseSunsetSunriseRequest {
     latitude: number;
     longitude: number;
     date?: string | null;
-    camelCase?: boolean;
     apiUrl?: string;
     kyOptions?: KyOptions;
+    useMocks?: boolean;
 }
 
 interface BaseSnakeCaseSunsetSunriseResults {
@@ -55,6 +69,23 @@ interface FormattedCamelCaseSunsetSunriseResponse
     dayLength: number;
 }
 
+interface SunsetSunriseRequest extends BaseSunsetSunriseRequest {
+    formatted?: boolean;
+    camelCase?: boolean;
+}
+
+type SnakeCaseSunsetSunriseResponse =
+    | FormattedSnakeCaseSunsetSunriseResponse
+    | UnformattedSnakeCaseSunsetSunriseResponse;
+
+type CamelCaseSunsetSunriseResponse =
+    | FormattedCamelCaseSunsetSunriseResponse
+    | UnformattedCamelCaseSunsetSunriseResponse;
+
+type SunsetSunriseResponse =
+    | SnakeCaseSunsetSunriseResponse
+    | CamelCaseSunsetSunriseResponse;
+
 export async function getSunsetSunriseInfo(
     request: BaseSunsetSunriseRequest & {formatted: false; camelCase?: false}
 ): Promise<UnformattedSnakeCaseSunsetSunriseResponse>;
@@ -73,29 +104,23 @@ export async function getSunsetSunriseInfo(
 
 export async function getSunsetSunriseInfo(
     request: BaseSunsetSunriseRequest & {formatted: boolean; camelCase?: false}
-): Promise<
-    | FormattedSnakeCaseSunsetSunriseResponse
-    | UnformattedSnakeCaseSunsetSunriseResponse
->;
+): Promise<SnakeCaseSunsetSunriseResponse>;
 
 export async function getSunsetSunriseInfo(
     request: BaseSunsetSunriseRequest & {formatted: boolean; camelCase: true}
-): Promise<
-    | FormattedCamelCaseSunsetSunriseResponse
-    | UnformattedCamelCaseSunsetSunriseResponse
->;
+): Promise<CamelCaseSunsetSunriseResponse>;
+
+/* We need to duplicate the implementation signature because only the overloads
+   contribute to the final shape of the function signature. See:
+   https://github.com/Microsoft/TypeScript/wiki/FAQ#why-am-i-getting-supplied-parameters-do-not-match-any-signature-error
+   */
+export async function getSunsetSunriseInfo(
+    request: SunsetSunriseRequest
+): Promise<SunsetSunriseResponse>;
 
 export async function getSunsetSunriseInfo(
-    request: BaseSunsetSunriseRequest & {
-        formatted?: boolean;
-        camelCase?: boolean;
-    }
-): Promise<
-    | FormattedSnakeCaseSunsetSunriseResponse
-    | FormattedCamelCaseSunsetSunriseResponse
-    | UnformattedSnakeCaseSunsetSunriseResponse
-    | UnformattedCamelCaseSunsetSunriseResponse
-> {
+    request: SunsetSunriseRequest
+): Promise<SunsetSunriseResponse> {
     if (!request.latitude) {
         throw new Error("Latitude is a required parameter");
     }
@@ -126,6 +151,18 @@ export async function getSunsetSunriseInfo(
         typeof request.date !== "string"
     ) {
         throw new Error("Invalid date");
+    }
+
+    if (request.useMocks) {
+        if (request.formatted && request.camelCase) {
+            return MOCK_FORMATTED_CAMEL_CASE_RESPONSE;
+        } else if (request.formatted) {
+            return MOCK_FORMATTED_SNAKE_CASE_RESPONSE;
+        } else if (!request.formatted && request.camelCase) {
+            return MOCK_UNFORMATTED_CAMEL_CASE_RESPONSE;
+        } else {
+            return MOCK_UNFORMATTED_SNAKE_CASE_RESPONSE;
+        }
     }
 
     const response = await ky(

@@ -26,8 +26,8 @@ test("Successful unformatted response", async () => {
 
 test("Successful unformatted camel case response", async () => {
     const info = await getSunsetSunriseInfo({
-        latitude: 34.5,
-        longitude: 88.88,
+        latitude: -34.5,
+        longitude: -88.88,
         camelCase: true,
     });
 
@@ -113,4 +113,23 @@ test.each([42, true])("Errors for a bad date: %p", async (invalidDate) => {
             date: (invalidDate as unknown) as string,
         })
     ).rejects.toThrowError(/date/i);
+});
+
+test.each([
+    {formatted: true, camelCase: true},
+    {formatted: true, camelCase: false},
+    {formatted: false, camelCase: true},
+    {formatted: false, camelCase: false},
+])("Mock mode works with: %p", async (options) => {
+    fetchMock.resetHistory();
+
+    await getSunsetSunriseInfo({
+        latitude: 23.46,
+        longitude: -50,
+        formatted: options.formatted,
+        camelCase: options.camelCase,
+        useMocks: true,
+    });
+
+    expect(fetchMock.calls().length).toEqual(0);
 });
