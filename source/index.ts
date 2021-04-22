@@ -2,19 +2,9 @@ import ky from "ky-universal";
 import {Options as KyOptions} from "ky";
 import camelCaseKeys from "camelcase-keys";
 
-import {
-    MOCK_FORMATTED_CAMEL_CASE_RESPONSE,
-    MOCK_FORMATTED_SNAKE_CASE_RESPONSE,
-    MOCK_UNFORMATTED_CAMEL_CASE_RESPONSE,
-    MOCK_UNFORMATTED_SNAKE_CASE_RESPONSE,
-} from "./mocks";
+import {MOCK_FORMATTED_RESPONSE, MOCK_UNFORMATTED_RESPONSE} from "./mocks";
 
-export {
-    MOCK_FORMATTED_CAMEL_CASE_RESPONSE,
-    MOCK_FORMATTED_SNAKE_CASE_RESPONSE,
-    MOCK_UNFORMATTED_CAMEL_CASE_RESPONSE,
-    MOCK_UNFORMATTED_SNAKE_CASE_RESPONSE,
-};
+export {MOCK_FORMATTED_RESPONSE, MOCK_UNFORMATTED_RESPONSE};
 
 interface BaseSunriseSunsetRequest {
     latitude: number;
@@ -25,19 +15,11 @@ interface BaseSunriseSunsetRequest {
     useMocks?: boolean;
 }
 
-interface BaseSnakeCaseSunriseSunsetResults {
-    sunrise: string;
-    sunset: string;
-    solar_noon: string;
-    civil_twilight_begin: string;
-    civil_twilight_end: string;
-    nautical_twilight_begin: string;
-    nautical_twilight_end: string;
-    astronomical_twilight_begin: string;
-    astronomical_twilight_end: string;
+export interface SunriseSunsetRequest extends BaseSunriseSunsetRequest {
+    formatted?: boolean;
 }
 
-interface BaseCamelCaseSunriseSunsetResults {
+interface BaseSunriseSunsetResults {
     sunrise: string;
     sunset: string;
     solarNoon: string;
@@ -49,66 +31,29 @@ interface BaseCamelCaseSunriseSunsetResults {
     astronomicalTwilightEnd: string;
 }
 
-interface UnformattedSnakeCaseSunriseSunsetResponse
-    extends BaseSnakeCaseSunriseSunsetResults {
-    day_length: string;
-}
-
-interface UnformattedCamelCaseSunriseSunsetResponse
-    extends BaseCamelCaseSunriseSunsetResults {
+interface UnformattedSunriseSunsetResponse extends BaseSunriseSunsetResults {
     dayLength: string;
 }
 
-interface FormattedSnakeCaseSunriseSunsetResponse
-    extends BaseSnakeCaseSunriseSunsetResults {
-    day_length: number;
-}
-
-interface FormattedCamelCaseSunriseSunsetResponse
-    extends BaseCamelCaseSunriseSunsetResults {
+interface FormattedSunriseSunsetResponse extends BaseSunriseSunsetResults {
     dayLength: number;
 }
 
-export interface SunriseSunsetRequest extends BaseSunriseSunsetRequest {
-    formatted?: boolean;
-    camelCase?: boolean;
-}
-
-type SnakeCaseSunriseSunsetResponse =
-    | FormattedSnakeCaseSunriseSunsetResponse
-    | UnformattedSnakeCaseSunriseSunsetResponse;
-
-type CamelCaseSunriseSunsetResponse =
-    | FormattedCamelCaseSunriseSunsetResponse
-    | UnformattedCamelCaseSunriseSunsetResponse;
-
-export type SunriseSunsetResponse =
-    | SnakeCaseSunriseSunsetResponse
-    | CamelCaseSunriseSunsetResponse;
+type SunriseSunsetResponse =
+    | FormattedSunriseSunsetResponse
+    | UnformattedSunriseSunsetResponse;
 
 export async function getSunriseSunsetInfo(
-    request: BaseSunriseSunsetRequest & {formatted: false; camelCase?: false}
-): Promise<UnformattedSnakeCaseSunriseSunsetResponse>;
+    request: BaseSunriseSunsetRequest & {formatted: false}
+): Promise<UnformattedSunriseSunsetResponse>;
 
 export async function getSunriseSunsetInfo(
-    request: BaseSunriseSunsetRequest & {formatted: false; camelCase: true}
-): Promise<UnformattedCamelCaseSunriseSunsetResponse>;
+    request: BaseSunriseSunsetRequest & {formatted?: true}
+): Promise<FormattedSunriseSunsetResponse>;
 
 export async function getSunriseSunsetInfo(
-    request: BaseSunriseSunsetRequest & {formatted?: true; camelCase?: false}
-): Promise<FormattedSnakeCaseSunriseSunsetResponse>;
-
-export async function getSunriseSunsetInfo(
-    request: BaseSunriseSunsetRequest & {formatted?: true; camelCase: true}
-): Promise<FormattedCamelCaseSunriseSunsetResponse>;
-
-export async function getSunriseSunsetInfo(
-    request: BaseSunriseSunsetRequest & {formatted: boolean; camelCase?: false}
-): Promise<SnakeCaseSunriseSunsetResponse>;
-
-export async function getSunriseSunsetInfo(
-    request: BaseSunriseSunsetRequest & {formatted: boolean; camelCase: true}
-): Promise<CamelCaseSunriseSunsetResponse>;
+    request: BaseSunriseSunsetRequest & {formatted: boolean}
+): Promise<SunriseSunsetResponse>;
 
 /* We need to duplicate the implementation signature because only the overloads
    contribute to the final shape of the function signature. See:
@@ -154,14 +99,10 @@ export async function getSunriseSunsetInfo(
     }
 
     if (request.useMocks) {
-        if (request.formatted && request.camelCase) {
-            return MOCK_FORMATTED_CAMEL_CASE_RESPONSE;
-        } else if (request.formatted) {
-            return MOCK_FORMATTED_SNAKE_CASE_RESPONSE;
-        } else if (!request.formatted && request.camelCase) {
-            return MOCK_UNFORMATTED_CAMEL_CASE_RESPONSE;
+        if (request.formatted) {
+            return MOCK_FORMATTED_RESPONSE;
         } else {
-            return MOCK_UNFORMATTED_SNAKE_CASE_RESPONSE;
+            return MOCK_UNFORMATTED_RESPONSE;
         }
     }
 
@@ -183,9 +124,5 @@ export async function getSunriseSunsetInfo(
 
     const body = await response.json();
 
-    if (request.camelCase) {
-        body.results = camelCaseKeys(body.results);
-    }
-
-    return body.results;
+    return camelCaseKeys(body.results);
 }
