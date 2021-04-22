@@ -21,17 +21,7 @@ test("Successful unformatted response", async () => {
         formatted: false,
     });
 
-    expect(info).toEqual(mocks.MOCK_UNFORMATTED_SNAKE_CASE_RESPONSE);
-});
-
-test("Successful unformatted camel case response", async () => {
-    const info = await getSunriseSunsetInfo({
-        latitude: -34.5,
-        longitude: -88.88,
-        camelCase: true,
-    });
-
-    expect(info).toEqual(mocks.MOCK_UNFORMATTED_CAMEL_CASE_RESPONSE);
+    expect(info).toEqual(mocks.MOCK_UNFORMATTED_RESPONSE);
 });
 
 test("Successful formatted response", async () => {
@@ -41,18 +31,7 @@ test("Successful formatted response", async () => {
         formatted: true,
     });
 
-    expect(info).toEqual(mocks.MOCK_FORMATTED_SNAKE_CASE_RESPONSE);
-});
-
-test("Successful formatted camel case response", async () => {
-    const info = await getSunriseSunsetInfo({
-        latitude: 34.5,
-        longitude: 88.88,
-        camelCase: true,
-        formatted: true,
-    });
-
-    expect(info).toEqual(mocks.MOCK_FORMATTED_CAMEL_CASE_RESPONSE);
+    expect(info).toEqual(mocks.MOCK_FORMATTED_RESPONSE);
 });
 
 test("Can override the API URL", async () => {
@@ -115,21 +94,18 @@ test.each([42, true])("Errors for a bad date: %p", async (invalidDate) => {
     ).rejects.toThrowError(/date/i);
 });
 
-test.each([
-    {formatted: true, camelCase: true},
-    {formatted: true, camelCase: false},
-    {formatted: false, camelCase: true},
-    {formatted: false, camelCase: false},
-])("Mock mode works with: %p", async (options) => {
-    fetchMock.resetHistory();
+test.each([{formatted: true}, {formatted: false}])(
+    "Mock mode works with: %p",
+    async (options) => {
+        fetchMock.resetHistory();
 
-    await getSunriseSunsetInfo({
-        latitude: 23.46,
-        longitude: -50,
-        formatted: options.formatted,
-        camelCase: options.camelCase,
-        useMocks: true,
-    });
+        await getSunriseSunsetInfo({
+            latitude: 23.46,
+            longitude: -50,
+            formatted: options.formatted,
+            useMocks: true,
+        });
 
-    expect(fetchMock.calls().length).toEqual(0);
-});
+        expect(fetchMock.calls().length).toEqual(0);
+    }
+);
