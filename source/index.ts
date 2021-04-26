@@ -6,7 +6,7 @@ import {MOCK_FORMATTED_RESPONSE, MOCK_UNFORMATTED_RESPONSE} from "./mocks";
 
 export {MOCK_FORMATTED_RESPONSE, MOCK_UNFORMATTED_RESPONSE};
 
-interface BaseSunriseSunsetRequest {
+interface BaseSunriseSunsetOptions {
     latitude: number;
     longitude: number;
     date?: string | null;
@@ -15,11 +15,11 @@ interface BaseSunriseSunsetRequest {
     useMocks?: boolean;
 }
 
-export interface SunriseSunsetRequest extends BaseSunriseSunsetRequest {
+export interface SunriseSunsetOptions extends BaseSunriseSunsetOptions {
     formatted?: boolean;
 }
 
-interface BaseSunriseSunsetResults {
+interface BaseSunriseSunsetResponse {
     sunrise: string;
     sunset: string;
     solarNoon: string;
@@ -31,28 +31,30 @@ interface BaseSunriseSunsetResults {
     astronomicalTwilightEnd: string;
 }
 
-interface UnformattedSunriseSunsetResponse extends BaseSunriseSunsetResults {
+export interface UnformattedSunriseSunsetResponse
+    extends BaseSunriseSunsetResponse {
     dayLength: string;
 }
 
-interface FormattedSunriseSunsetResponse extends BaseSunriseSunsetResults {
+export interface FormattedSunriseSunsetResponse
+    extends BaseSunriseSunsetResponse {
     dayLength: number;
 }
 
-type SunriseSunsetResponse =
+export type SunriseSunsetResponse =
     | FormattedSunriseSunsetResponse
     | UnformattedSunriseSunsetResponse;
 
 export async function getSunriseSunsetInfo(
-    request: BaseSunriseSunsetRequest & {formatted: false}
+    options: BaseSunriseSunsetOptions & {formatted: false}
 ): Promise<UnformattedSunriseSunsetResponse>;
 
 export async function getSunriseSunsetInfo(
-    request: BaseSunriseSunsetRequest & {formatted?: true}
+    options: BaseSunriseSunsetOptions & {formatted?: true}
 ): Promise<FormattedSunriseSunsetResponse>;
 
 export async function getSunriseSunsetInfo(
-    request: BaseSunriseSunsetRequest & {formatted: boolean}
+    options: BaseSunriseSunsetOptions & {formatted: boolean}
 ): Promise<SunriseSunsetResponse>;
 
 /* We need to duplicate the implementation signature because only the overloads
@@ -60,46 +62,46 @@ export async function getSunriseSunsetInfo(
    https://github.com/Microsoft/TypeScript/wiki/FAQ#why-am-i-getting-supplied-parameters-do-not-match-any-signature-error
    */
 export async function getSunriseSunsetInfo(
-    request: SunriseSunsetRequest
+    options: SunriseSunsetOptions
 ): Promise<SunriseSunsetResponse>;
 
 export async function getSunriseSunsetInfo(
-    request: SunriseSunsetRequest
+    options: SunriseSunsetOptions
 ): Promise<SunriseSunsetResponse> {
-    if (!request.latitude) {
+    if (!options.latitude) {
         throw new Error("Latitude is a required parameter");
     }
-    if (!request.longitude) {
+    if (!options.longitude) {
         throw new Error("Longitude is a required parameter");
     }
     if (
-        typeof request.latitude !== "number" ||
-        !isFinite(request.latitude) ||
-        Math.abs(request.latitude) > 90
+        typeof options.latitude !== "number" ||
+        !isFinite(options.latitude) ||
+        Math.abs(options.latitude) > 90
     ) {
         throw new Error(
             "Latitude must be a number between -90 and 90 (inclusive)"
         );
     }
     if (
-        typeof request.longitude !== "number" ||
-        !isFinite(request.longitude) ||
-        Math.abs(request.longitude) > 180
+        typeof options.longitude !== "number" ||
+        !isFinite(options.longitude) ||
+        Math.abs(options.longitude) > 180
     ) {
         throw new Error(
             "Longitude must be a number between -180 and 180 (inclusive)"
         );
     }
     if (
-        typeof request.date !== "undefined" &&
-        request.date !== null &&
-        typeof request.date !== "string"
+        typeof options.date !== "undefined" &&
+        options.date !== null &&
+        typeof options.date !== "string"
     ) {
         throw new Error("Invalid date");
     }
 
-    if (request.useMocks) {
-        if (typeof request.formatted === "undefined" || request.formatted) {
+    if (options.useMocks) {
+        if (typeof options.formatted === "undefined" || options.formatted) {
             return MOCK_FORMATTED_RESPONSE;
         } else {
             return MOCK_UNFORMATTED_RESPONSE;
@@ -107,18 +109,18 @@ export async function getSunriseSunsetInfo(
     }
 
     const response = await ky(
-        request.apiUrl || "https://api.sunrise-sunset.org/json",
+        options.apiUrl || "https://api.sunrise-sunset.org/json",
         {
             method: "get",
             searchParams: {
-                lat: request.latitude,
-                lng: request.longitude,
-                ...(typeof request.date === "string" && {date: request.date}),
-                ...(typeof request.formatted === "boolean" && {
-                    formatted: request.formatted ? 1 : 0,
+                lat: options.latitude,
+                lng: options.longitude,
+                ...(typeof options.date === "string" && {date: options.date}),
+                ...(typeof options.formatted === "boolean" && {
+                    formatted: options.formatted ? 1 : 0,
                 }),
             },
-            ...request.kyOptions,
+            ...options.kyOptions,
         }
     );
 

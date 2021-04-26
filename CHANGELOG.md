@@ -4,6 +4,15 @@ This project attempts to adhere to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+### Added
+
+- Exported the `UnformattedSunriseSunsetResponse`,
+  `FormattedSunriseSunsetResponse`, and `SunriseSunsetResponse` types.
+
+### Changed
+
+- Renamed the `SunriseSunsetRequest` type to `SunriseSunsetOptions`.
+
 ### Removed
 
 - Removed the option to get keys in camel case format. This is the default
