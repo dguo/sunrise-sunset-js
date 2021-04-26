@@ -11,11 +11,16 @@ This project attempts to adhere to [Semantic Versioning](http://semver.org).
   to the convention for JavaScript. If you need snake case keys, you can convert
   them yourself.
 
+### Fixed
+
+- Fixed mock mode incorrectly returning an unformatted response when the
+  formatting mode isn't specified.
+
 ## [0.1.0] - (2021-03-27)
 
 ### Added
 
 - Initial implementation
 
-[Unreleased]: https://github.com/dguo/sunrise-sunset-js/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/dguo/sunrise-sunset-js/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/dguo/sunrise-sunset-js/releases/tag/v0.1.0

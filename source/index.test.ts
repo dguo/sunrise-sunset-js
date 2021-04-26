@@ -5,12 +5,12 @@ import * as mocks from "./mocks";
 
 fetchMock
     .mock(
-        (url) => !url.includes("formatted=1"),
-        mocks.MOCK_RAW_UNFORMATTED_RESPONSE
+        (url) => !url.includes("formatted=") || url.includes("formatted=1"),
+        mocks.MOCK_RAW_FORMATTED_RESPONSE
     )
     .mock(
-        (url) => url.includes("formatted=1"),
-        mocks.MOCK_RAW_FORMATTED_RESPONSE
+        (url) => url.includes("formatted=0"),
+        mocks.MOCK_RAW_UNFORMATTED_RESPONSE
     );
 
 test("Successful unformatted response", async () => {
@@ -58,6 +58,38 @@ test("Can override Ky options", async () => {
     });
 
     expect(fetchMock.lastUrl()).toMatch("foo=bar");
+});
+
+test("Mock mode works when there's no explicit formatting mode", async () => {
+    const info = await getSunriseSunsetInfo({
+        latitude: 34.5,
+        longitude: 88.88,
+        useMocks: true,
+    });
+
+    expect(info).toEqual(mocks.MOCK_FORMATTED_RESPONSE);
+});
+
+test("Mock mode works when explicitly turning formatted mode on", async () => {
+    const info = await getSunriseSunsetInfo({
+        latitude: 34.5,
+        longitude: 88.88,
+        useMocks: true,
+        formatted: true,
+    });
+
+    expect(info).toEqual(mocks.MOCK_FORMATTED_RESPONSE);
+});
+
+test("Mock mode works when explicitly turning formatted mode off", async () => {
+    const info = await getSunriseSunsetInfo({
+        latitude: 34.5,
+        longitude: 88.88,
+        useMocks: true,
+        formatted: false,
+    });
+
+    expect(info).toEqual(mocks.MOCK_UNFORMATTED_RESPONSE);
 });
 
 test.each([100, "foo", -90.1, NaN, null])(

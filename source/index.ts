@@ -99,7 +99,7 @@ export async function getSunriseSunsetInfo(
     }
 
     if (request.useMocks) {
-        if (request.formatted) {
+        if (typeof request.formatted === "undefined" || request.formatted) {
             return MOCK_FORMATTED_RESPONSE;
         } else {
             return MOCK_UNFORMATTED_RESPONSE;
