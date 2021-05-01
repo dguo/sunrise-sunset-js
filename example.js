@@ -8,7 +8,7 @@ const getSunriseSunsetInfo = require("./build").getSunriseSunsetInfo;
     try {
         const response = await getSunriseSunsetInfo({
             latitude: 36.72016,
-            longitude: -4.42034,
+            longitude: -44.42034,
             formatted: false,
         });
         console.log(response);
