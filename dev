@@ -18,7 +18,7 @@ def command(help):
         return func
     return decorator
 
-@command('Format the code with Prettier')
+@command('Format the code')
 def format(args, remaining):
     return run(DOCKER_RUN + ['yarn', 'run', 'format']).returncode
 
