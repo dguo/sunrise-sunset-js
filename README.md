@@ -35,7 +35,7 @@ import {getSunriseSunsetInfo} from "sunrise-sunset-api";
 })();
 ```
 
-The info is in this format. Note that all times are in
+The response is in this format. Note that all times are in
 [UTC](https://en.wikipedia.org/wiki/Coordinated_Universal_Time).
 
 ```js
@@ -53,9 +53,9 @@ The info is in this format. Note that all times are in
 }
 ```
 
-You can get the info for a specific date (in `YYYY-MM-DD` format) with the
-`date` option. If you don't pass a date, you'll get the info for whatever the
-API thinks is the current date.
+You can get the response for a specific date (in `YYYY-MM-DD` format) with the
+`date` option. If you don't pass a date, you'll get the response for whatever
+the API thinks is the current date.
 
 ```js
 const response = await getSunriseSunsetInfo({
@@ -68,15 +68,16 @@ const response = await getSunriseSunsetInfo({
 You can turn off formatting with the `formatted` option.
 
 ```js
-    const response = await getSunriseSunsetInfo({
-        latitude: 36.72016,
-        longitude: -44.42034,
-        formatted: false
-    });
+const response = await getSunriseSunsetInfo({
+    latitude: 36.72016,
+    longitude: -44.42034,
+    formatted: false
+});
 ```
 
-Which makes the info come back in this format. `dayLength` is in seconds, and
-the times are in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format).
+Which makes the info come back in this format: `dayLength` is an integer number
+of seconds, and the times are in [ISO
+8601](https://en.wikipedia.org/wiki/ISO_8601) format.
 
 ```js
 {
@@ -150,7 +151,7 @@ Should be a value between -180 and 180 (inclusive).
 Type: `string | null`\
 Default: `current date (according to the API)`
 
-Pass this to get the info for a different date. The value should be in a
+Pass this to get the info for a particular date. The value should be in a
 `YYYY-MM-DD` format.
 
 ##### formatted
@@ -173,7 +174,8 @@ code.
 
 ##### kyOptions
 
-Type: `object`
+Type: `object`\
+Default: `{}`
 
 Pass this to override any [Ky
 options](https://github.com/sindresorhus/ky/blob/main/readme.md#options).
@@ -191,14 +193,14 @@ In the browser, you can use the [Geolocation
 API](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API) to get
 the user's latitude and longitude, assuming the user gives permission.
 
-In a Node.js environment, you could look up the coordinates based on an IP
+In a Node.js environment, you can look up the coordinates based on an IP
 address. There are several APIs for this, like [IPinfo](https://ipinfo.io/),
 [ipstack](https://ipstack.com/), and [ipapi](https://ipapi.co/).
 
 ## Types
 
-This library is written in TypeScript and exports some types that you might find
-useful.
+This library is written in [TypeScript](https://www.typescriptlang.org/) and
+exports some types that you might find useful.
 
 ```ts
 import {
@@ -219,7 +221,7 @@ responses.
 
 For automated tests or for any other situation where you don't want to make
 actual network requests, you can turn on mock mode, which will make the function
-return hardcoded mock resopnses.
+return hardcoded responses.
 
 ```js
 const response = await getSunriseSunsetInfo({
