@@ -1,3 +1,7 @@
+/* eslint-env node */
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+const ky = require("ky-universal");
 const getSunriseSunsetInfo = require("./build").getSunriseSunsetInfo;
 
 (async function main() {
@@ -9,6 +13,9 @@ const getSunriseSunsetInfo = require("./build").getSunriseSunsetInfo;
         });
         console.log(response);
     } catch (error) {
-        console.log(await error.response.json());
+        if (error instanceof ky.HTTPError && error.response.status === 400) {
+            console.error(await error.response.json());
+        }
+        console.error(error);
     }
 })();
