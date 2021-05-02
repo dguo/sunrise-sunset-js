@@ -4,6 +4,10 @@ This project attempts to adhere to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed the homepage and repository links in `package.json`.
+
 ## [0.2.0] - (2021-05-01)
 
 ### Added

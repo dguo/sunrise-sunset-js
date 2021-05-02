@@ -6,10 +6,10 @@
         "sunrise",
         "sunset"
     ],
-    "homepage": "https://github.com/dguo/sunrise-sunset-api",
+    "homepage": "https://github.com/dguo/sunrise-sunset-js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/dguo/sunrise-sunset-api.git"
+        "url": "https://github.com/dguo/sunrise-sunset-js.git"
     },
     "author": {
         "name": "Danny Guo",
